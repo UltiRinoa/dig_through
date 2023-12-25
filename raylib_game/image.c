@@ -1,40 +1,80 @@
 #include "image.h"
+#include <string.h>
 
-Texture2D PathToTexture(char* path,int size)
+void InitTexture(void)
 {
-	Image image = LoadImage(path);
-	ImageResizeNN(&image, size, size);
-	return LoadTextureFromImage(image);
+    for (int i = 0; i < 10; i++)
+    {
+        char path[256];
+        sprintf(path, "image/tiles/%s_%d.png", TileTypeToString(Ice), i);
+        textureLib.ice.tile[i] = PathToTexture(path, GRID_SIZE);
+        sprintf(path, "image/tiles/%s_%d.png", TileTypeToString(Grass), i);
+        textureLib.grass.tile[i] = PathToTexture(path, GRID_SIZE);
+        // sprintf(path, "image/tiles/%s_%d.png", TileTypeToString(Clok), i);
+        // textureLib.clok.tile[i] = PathToTexture(path, GRID_SIZE);
+        // sprintf(path, "image/tiles/%s_%d.png", TileTypeToString(Stone), i);
+        // textureLib.stone.tile[i] = PathToTexture(path, GRID_SIZE);
+        sprintf(path, "image/tiles/%s_%d.png", TileTypeToString(Sand), i);
+        textureLib.sand.tile[i] = PathToTexture(path, GRID_SIZE);
+        sprintf(path, "image/tiles/%s_%d.png", TileTypeToString(Igneous), i);
+        textureLib.igneous.tile[i] = PathToTexture(path, GRID_SIZE);
+        sprintf(path, "image/tiles/%s_%d.png", TileTypeToString(Lava), i);
+        textureLib.lava.tile[i] = PathToTexture(path, GRID_SIZE);
+    }
 }
 
-Texture2D HollowTile(enum TileType type)
+const char *TileTypeToString(TileType type)
+{
+    switch (type)
+    {
+    case Empty:
+        return "empty";
+    case Ice:
+        return "ice";
+    case Grass:
+        return "grass";
+    case Clok:
+        return "clock";
+    case Stone:
+        return "stone";
+    case Sand:
+        return "sand";
+    case Igneous:
+        return "igneous";
+    case Lava:
+        return "lava";
+    default:
+        return "";
+    }
+}
+
+Texture2D PathToTexture(char *path, int size)
+{
+    Image image = LoadImage(path);
+    ImageResizeNN(&image, size, size);
+    return LoadTextureFromImage(image);
+}
+
+Texture2D GetTileTexture(TileType type, int idx)
 {
     switch (type)
     {
     case Empty:
         break;
     case Ice:
-        return PathToTexture("image/tiles/ice_bg.png",GRID_SIZE);
-        break;
+        return textureLib.ice.tile[idx];
     case Grass:
-        return PathToTexture("image/tiles/grass_bg.png", GRID_SIZE);
-        break;
+        return textureLib.grass.tile[idx];
     case Clok:
-        return PathToTexture("image/tiles/clok_bg.png", GRID_SIZE);
-        break;
+        return textureLib.clok.tile[idx];
     case Stone:
-        return PathToTexture("image/tiles/stone_bg.png", GRID_SIZE);
-        break;
+        return textureLib.stone.tile[idx];
     case Sand:
-        return PathToTexture("image/tiles/sand_bg.png", GRID_SIZE);
-        break;
+        return textureLib.sand.tile[idx];
     case Igneous:
-        return PathToTexture("image/tiles/igneous_bg.png", GRID_SIZE);
-        break;
+        return textureLib.igneous.tile[idx];
     case Lava:
-        return PathToTexture("image/tiles/lave_bg.png", GRID_SIZE);
-        break;
-    default:
-        break;
+        return textureLib.lava.tile[idx];
     }
+    return textureLib.ice.tile[0];
 }
